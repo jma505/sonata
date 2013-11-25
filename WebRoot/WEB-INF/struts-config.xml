@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+  <data-sources />
+  <form-beans >
+    <form-bean name="loginForm" type="org.jmanderson.sonata.form.LoginForm" />
+    <form-bean name="gasForm" type="org.jmanderson.sonata.form.GasForm" />
+    <form-bean name="serviceForm" type="org.jmanderson.sonata.form.ServiceForm" />
+  </form-beans>
+  <global-exceptions />
+  <global-forwards >
+    <forward name="login" path="/login.jsp" />
+  </global-forwards>
+
+  <action-mappings >
+    <action
+      attribute="loginForm"
+      input="/login.jsp"
+      name="loginForm"
+      path="/login"
+      scope="request"
+      type="org.jmanderson.sonata.action.LoginAction">
+      <forward name="success" path="/gasList.do" />
+      
+    </action>
+    <action path="/gasList" type="org.jmanderson.sonata.action.GasListAction">
+      <forward name="success" path="/gaslist.jsp" />
+    </action>
+    <action path="/logoff" type="org.jmanderson.sonata.action.LogoffAction">
+      <forward name="success" path="/login.jsp" />
+      
+    </action>
+    <action
+      attribute="gasForm"
+      name="gasForm"
+      path="/editGas"
+      scope="request"
+      type="org.jmanderson.sonata.action.EditGasAction"
+      validate="false">
+      <forward name="success" path="/gasedit.jsp" />
+    </action>
+    <action
+      attribute="serviceForm"
+      name="serviceForm"
+      path="/editService"
+      scope="request"
+      type="org.jmanderson.sonata.action.EditServiceAction"
+      validate="false">
+      <forward name="success" path="/svcedit.jsp" />
+    </action>
+    <action
+      attribute="gasForm"
+      input="/gasedit.jsp"
+      name="gasForm"
+      path="/saveGas"
+      scope="request"
+      type="org.jmanderson.sonata.action.SaveGasAction">
+      <forward name="delete" path="/delete.do" />
+      <forward name="success" path="/gasList.do" />
+    </action>
+    <action
+      attribute="serviceForm"
+      input="/svcedit.jsp"
+      name="serviceForm"
+      path="/saveService"
+      scope="request"
+      type="org.jmanderson.sonata.action.SaveServiceAction">
+      <forward name="delete" path="/delete.do" />
+      <forward name="success" path="/gasList.do" />
+    </action>
+    <action path="/delete" type="org.jmanderson.sonata.action.DeleteAction">
+      <forward name="success" path="/gasList.do" />
+    </action>
+    <action path="/listAll" type="org.jmanderson.sonata.action.ListAllAction">
+      <forward name="success" path="/gasxml.jsp" />
+    </action>
+  </action-mappings>
+  <message-resources parameter="org.jmanderson.sonata.ApplicationResources" />
+</struts-config>
+
