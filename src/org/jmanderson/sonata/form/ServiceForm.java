@@ -38,6 +38,7 @@ public class ServiceForm extends ActionForm {
 	private float service_repair_cost;
 	private String service_long_desc;
 	private String service_dateD;
+	private boolean formal_service;
 	
 
 	// --------------------------------------------------------- Methods
@@ -148,6 +149,14 @@ public class ServiceForm extends ActionForm {
 
 	public void setService_dateD(String service_dateD) {
 		this.service_dateD = service_dateD;
+	}
+	
+	public boolean getFormalService() {
+		return formal_service;
+	}
+	
+	public void setFormalService(boolean formal_service) {
+		this.formal_service = formal_service;
 	}
 
 }

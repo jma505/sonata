@@ -79,6 +79,7 @@ public class Log extends AbstractLog implements java.io.Serializable {
     	// Does this need to be changed???
     	//
     	setService(Boolean.TRUE);
+    	setFormalService(Boolean.valueOf(form.getFormalService()));
     }
     
     public void fillGasForm(GasForm form) {
@@ -101,6 +102,7 @@ public class Log extends AbstractLog implements java.io.Serializable {
     	form.setService_routine_cost(this.getSvcRoutineCost().floatValue());
     	form.setService_repair_cost(this.getSvcRepairCost().floatValue());
     	form.setService_long_desc(this.getLongdesc());
+    	form.setFormalService(this.getFormalService().booleanValue());
     }
     
     private boolean isGasPurchase() {

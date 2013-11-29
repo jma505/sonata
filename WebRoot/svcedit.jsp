@@ -59,7 +59,7 @@
 </tr>
 <tr>
   <th align="right">Desc:</th>
-  <td align="left"><html:text property="service_desc_long" size="50" maxlength="500"/></td>
+  <td align="left"><html:text property="service_long_desc" size="50" maxlength="500"/></td>
 </tr>
 </table>
 </table>

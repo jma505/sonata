@@ -38,7 +38,7 @@ public class LogDA {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return log;
@@ -58,7 +58,7 @@ public class LogDA {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return log;
@@ -78,7 +78,7 @@ public class LogDA {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return log;
@@ -90,15 +90,15 @@ public class LogDA {
 		try {
 			Session session = SessionFactory.getSession();
 			Criteria criteria = session.createCriteria(Log.class);
-			criteria.add(Restrictions.gt("gallons", Float.valueOf("0.000")));
-			criteria.addOrder(Order.desc("id"));
+			criteria.add(Restrictions.eq("service", Boolean.valueOf(false)));
+			criteria.addOrder(Order.desc("mileage"));
 			criteria.setMaxResults(5);
 			list = criteria.list();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return list;
@@ -119,7 +119,7 @@ public class LogDA {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return mileage;
@@ -131,15 +131,15 @@ public class LogDA {
 		try {
 			Session session = SessionFactory.getSession();
 			Criteria criteria = session.createCriteria(Log.class);
-			criteria.add(Restrictions.eq("gallons", Float.valueOf("0.000")));
-			criteria.addOrder(Order.desc("id"));
+			criteria.add(Restrictions.eq("service", Boolean.valueOf(true)));
+			criteria.addOrder(Order.desc("mileage"));
 			criteria.setMaxResults(5);
 			list = criteria.list();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return list;
@@ -158,7 +158,7 @@ public class LogDA {
 			System.out.println(e);
 			txn.rollback();
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 	}
 
@@ -174,7 +174,7 @@ public class LogDA {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return list;
@@ -186,20 +186,19 @@ public class LogDA {
 		try {
 			Session session = SessionFactory.getSession();
 			StringBuffer sb = new StringBuffer();
-			sb
-					.append(
-							"select sum(x.gallons) as gsum from (select gallons from log where id > ")
-					.append(id1).append(" and id <= ").append(id2).append(
-							") as x");
+			sb.append(
+					"select sum(x.gallons) as gsum from (select gallons from log where id > ")
+					.append(id1).append(" and id <= ").append(id2)
+					.append(") as x");
 			Query query = session.createSQLQuery(sb.toString()).addScalar(
 					"gsum", StandardBasicTypes.FLOAT);
-//			Object[] result = (Object[]) query.uniqueResult();
+			// Object[] result = (Object[]) query.uniqueResult();
 			gallons = ((Float) query.uniqueResult()).floatValue();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return gallons;
@@ -213,46 +212,58 @@ public class LogDA {
 			Query query = session
 					.createSQLQuery(
 							"select ((max(mileage)-min(mileage))/sum(gallons)) as mpg, (sum(cost)/sum(gallons)) as price from log")
-					.addScalar("mpg", StandardBasicTypes.FLOAT).addScalar("price",
-							StandardBasicTypes.FLOAT);
+					.addScalar("mpg", StandardBasicTypes.FLOAT)
+					.addScalar("price", StandardBasicTypes.FLOAT);
 			Object[] result = (Object[]) query.uniqueResult();
 			mpg.setOverall_MPG(nf1.format(((Float) result[0]).floatValue()));
 			mpg.setAverage_Price(cnf2.format(((Float) result[1]).floatValue()));
 			query = session
 					.createSQLQuery(
 							"select date, mileage, spgetnextservice() as serv from log where id = spgetprevservice()")
-					.addScalar("date", StandardBasicTypes.DATE).addScalar("mileage",
-							StandardBasicTypes.INTEGER).addScalar("serv",
-							StandardBasicTypes.STRING);
+					.addScalar("date", StandardBasicTypes.DATE)
+					.addScalar("mileage", StandardBasicTypes.INTEGER)
+					.addScalar("serv", StandardBasicTypes.STRING);
 			result = (Object[]) query.uniqueResult();
 			Date lastServiceDate = (Date) result[0];
 			int lastServiceMileage = ((Integer) result[1]).intValue();
 			mpg.setNextServiceMileage((String) result[2]);
-			int minId = ((Integer) session.createCriteria(Log.class)
-					.setProjection(Property.forName("id").min()).uniqueResult())
-					.intValue();
-			query = session.createSQLQuery(
-					"select date from log where id = :minId").addScalar("date",
-					StandardBasicTypes.DATE).setInteger("minId", minId);
+			int minMileage = ((Integer) session.createCriteria(Log.class)
+					.setProjection(Property.forName("mileage").min())
+					.uniqueResult()).intValue();
+			query = session
+					.createSQLQuery(
+							"select date from log where mileage = :minMileage")
+					.addScalar("date", StandardBasicTypes.DATE)
+					.setInteger("minMileage", minMileage);
 			Date beginDate = (Date) query.uniqueResult();
-			int maxId = ((Integer) session.createCriteria(Log.class)
-					.setProjection(Property.forName("id").max()).uniqueResult())
-					.intValue();
-			query = session.createSQLQuery(
-					"select date, mileage from log where id = :maxId")
-					.addScalar("date", StandardBasicTypes.DATE).addScalar("mileage",
-							StandardBasicTypes.INTEGER).setInteger("maxId", maxId);
-			result = (Object[]) query.uniqueResult();
-			Date latestDate = (Date) result[0];
-			int latestMileage = ((Integer) result[1]).intValue();
+			int maxMileage = ((Integer) session.createCriteria(Log.class)
+					.setProjection(Property.forName("mileage").max())
+					.uniqueResult()).intValue();
+			query = session
+					.createSQLQuery(
+							"select date from log where mileage = :maxMileage")
+					.addScalar("date", StandardBasicTypes.DATE)
+					.setInteger("maxMileage", maxMileage);
+			// result = (Object[]) query.uniqueResult();
+			// Date latestDate = (Date) result[0];
+			Date latestDate = (Date) query.uniqueResult();
+			// int latestMileage = ((Integer) result[1]).intValue();
+			int latestMileage = maxMileage;
+			query = session
+					.createSQLQuery(
+							"select count(id) from log where formal_service = :svcTrue")
+					.addScalar("count", StandardBasicTypes.INTEGER)
+					.setBoolean("svcTrue", true);
+			// adjust number of services to eliminate the first one, which was when the vehicle was delivered
+			int numberOfServices = ((Integer) query.uniqueResult()).intValue() - 1;
 			mpg.setNextServiceDate(CalcService.calculateNextServiceDate(
 					beginDate, lastServiceDate, latestDate, lastServiceMileage,
-					latestMileage));
+					latestMileage, numberOfServices));
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
 		} finally {
-//			SessionFactory.closeSession();
+			// SessionFactory.closeSession();
 		}
 
 		return mpg;

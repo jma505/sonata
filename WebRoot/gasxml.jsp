@@ -2,8 +2,8 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/x.tld" prefix="x" %>
-<%@ taglib uri="/WEB-INF/c.tld" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/xml" prefix="x" %>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 
 <html:html locale="true">
 <head>

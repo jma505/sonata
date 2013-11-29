@@ -8,41 +8,46 @@ public class CalcService {
 
 	private static final int SERVICE_INTERVAL = 5000;
 
-	public static String calculateNextServiceDate(String begin, String last,
-			String latest, int lastServiceMileage, int latestMileage) {
-		Date beginDate = getDate(begin);
-		Date lastServiceDate = getDate(last);
-		Date latestDate = getDate(latest);
-		return calculateNextServiceDate(beginDate, lastServiceDate, latestDate,
-				lastServiceMileage, latestMileage);
-
-	}
+//	public static String calculateNextServiceDate(String begin, String last,
+//			String latest, int lastServiceMileage, int latestMileage) {
+//		Date beginDate = getDate(begin);
+//		Date lastServiceDate = getDate(last);
+//		Date latestDate = getDate(latest);
+//		return calculateNextServiceDate(beginDate, lastServiceDate, latestDate,
+//				lastServiceMileage, latestMileage);
+//
+//	}
 
 	public static String calculateNextServiceDate(Date beginDate,
 			Date lastServiceDate, Date latestDate, int lastServiceMileage,
-			int latestMileage) {
+			int latestMileage, int numberOfServices) {
 
 		StringBuffer sb = new StringBuffer();
-		int daysLatest;
-		int daysPrevious;
-		int daysAdjusted;
+		int daysLatest = -1;
+		int daysPrevious = -1;
+		int daysAdjusted = -1;
+	
 
 		daysLatest = daysPer5K(dateDifference(lastServiceDate, latestDate),
-				latestMileage);
-		daysPrevious = dateDifference(beginDate, lastServiceDate)
-				/ (lastServiceMileage / SERVICE_INTERVAL);
-		daysAdjusted = adjustedDaysPer5K(daysPrevious, daysLatest,
-				latestMileage);
-		sb.append("(Historical: ").append(
-				DateFormat.getDateInstance(2).format(
-						nextServiceDate(lastServiceDate, daysPrevious)));
-		sb.append(", Current: ").append(
+				latestMileage - lastServiceMileage);
+		if (numberOfServices > 0) {
+			daysPrevious = dateDifference(beginDate, lastServiceDate)
+					/ numberOfServices;
+//			daysAdjusted = adjustedDaysPer5K(daysPrevious, daysLatest,
+//					latestMileage);
+		}
+		sb.append("(Current: ").append(
 				DateFormat.getDateInstance(2).format(
 						nextServiceDate(lastServiceDate, daysLatest)));
-		sb.append(", Blended: ").append(
-				DateFormat.getDateInstance(2).format(
-						nextServiceDate(lastServiceDate, daysAdjusted)))
-				.append(")");
+		if (numberOfServices > 0) {
+			sb.append(", Historical: ").append(
+					DateFormat.getDateInstance(2).format(
+							nextServiceDate(lastServiceDate, daysPrevious)));
+//			sb.append(", Blended: ").append(
+//					DateFormat.getDateInstance(2).format(
+//							nextServiceDate(lastServiceDate, daysAdjusted)));
+		}
+		sb.append(")");
 
 		return sb.toString();
 
@@ -65,12 +70,12 @@ public class CalcService {
 	private static int daysPer5K(int days, int miles) {
 
 		int milesMod = miles % SERVICE_INTERVAL;
-		int milesPct = 100 * milesMod / SERVICE_INTERVAL;
-		if (milesPct == 0) {
-			milesPct = 1;
+		double milesPct = 100.0 * milesMod / SERVICE_INTERVAL;
+		if (milesPct == 0.0) {
+			milesPct = 0.1;
 		}
-		int daysPer5K = 100 * days / milesPct;
-		return daysPer5K;
+		double daysPer5K = 100 * days / milesPct;
+		return (int) daysPer5K;
 
 	}
 
@@ -98,8 +103,9 @@ public class CalcService {
 
 	private static Date getDate(String date) {
 		Calendar cal = Calendar.getInstance();
-		cal.set(Integer.parseInt(date.substring(0, 4)), Integer.parseInt(date
-				.substring(5, 7)), Integer.parseInt(date.substring(8)));
+		cal.set(Integer.parseInt(date.substring(0, 4)),
+				Integer.parseInt(date.substring(5, 7)),
+				Integer.parseInt(date.substring(8)));
 		return cal.getTime();
 	}
 }

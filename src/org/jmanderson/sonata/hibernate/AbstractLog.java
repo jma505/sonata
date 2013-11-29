@@ -26,11 +26,22 @@ public abstract class AbstractLog  implements java.io.Serializable {
      private Boolean service;
      private Float svcRepairCost;
      private Float svcRoutineCost;
+     private Boolean formalService;
 
 
     // Constructors
 
-    /** default constructor */
+    public Boolean getFormalService() {
+		return formalService;
+	}
+
+
+	public void setFormalService(Boolean formalService) {
+		this.formalService = formalService;
+	}
+
+
+	/** default constructor */
     public AbstractLog() {
     }
 

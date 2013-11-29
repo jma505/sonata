@@ -13,6 +13,7 @@
 <br>
 <center>
 <h2><bean:message key="gaslist.heading"/> <jsp:getProperty name="user" property="userFullName"/></h2>
+<font size="-1">v1.02</font>
 <html:link href="logoff.do"><h4>Logoff</h4></html:link>
 </center>
 
@@ -22,7 +23,7 @@
 <bean:message key="gaslist.overall.heading"/> <jsp:getProperty name="mpg" property="overall_MPG"/> - 
 <bean:message key="gaslist.average.heading"/> <jsp:getProperty name="mpg" property="average_Price"/>
 <br>
-Next service (<jsp:getProperty name="mpg" property="nextServiceMileage"/> mile) date is estimated to be <jsp:getProperty name="mpg" property="nextServiceDate"/><br><br>
+Next service (<jsp:getProperty name="mpg" property="nextServiceMileage"/> mile) date is estimated as: <jsp:getProperty name="mpg" property="nextServiceDate"/><br><br>
 </logic:present>
 </center>
 
@@ -94,7 +95,7 @@ Next service (<jsp:getProperty name="mpg" property="nextServiceMileage"/> mile) 
 <br>
 <center>
 <table align="center" border="0">
-<td align="center"><form method="post" action="editGas.do">
+<td align="center"><form method="post" action="editService.do">
 <input type="submit" name="add" value="Add New Entry"/>
 </form></td>
 

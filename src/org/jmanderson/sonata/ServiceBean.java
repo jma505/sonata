@@ -9,58 +9,58 @@ public final class ServiceBean implements Serializable {
 	 */
 	private static final long serialVersionUID = -4896304465474938125L;
 
-	private int gas_id;
+	private int service_id;
 
-	private String gas_date;
+	private String service_date;
 
-	private int gas_mileage;
+	private int service_mileage;
 
-	private String gas_cost;
+	private String service_cost;
 
 	private String longdesc;
 	
-	private String svc_routine_cost;
+	private String service_routine_cost;
 	
-	private String svc_repair_cost;
+	private String service_repair_cost;
 
 	public ServiceBean() {
-		gas_id = 0;
-		gas_date = "";
-		gas_cost = "0.00";
-		svc_routine_cost = "0.00";
-		svc_repair_cost = "0.00";
+		service_id = 0;
+		service_date = "";
+		service_cost = "0.00";
+		service_routine_cost = "0.00";
+		service_repair_cost = "0.00";
 	}
 
-	public int getGas_id() {
-		return gas_id;
+	public int getService_id() {
+		return service_id;
 	}
 
-	public String getGas_date() {
-		return gas_date;
+	public String getService_date() {
+		return service_date;
 	}
 
-	public int getGas_mileage() {
-		return gas_mileage;
+	public int getService_mileage() {
+		return service_mileage;
 	}
 
-	public String getGas_cost() {
-		return gas_cost;
+	public String getService_cost() {
+		return service_cost;
 	}
 
-	public void setGas_id(int i) {
-		gas_id = i;
+	public void setService_id(int i) {
+		service_id = i;
 	}
 
-	public void setGas_date(String s) {
-		gas_date = s;
+	public void setService_date(String s) {
+		service_date = s;
 	}
 
-	public void setGas_mileage(int i) {
-		gas_mileage = i;
+	public void setService_mileage(int i) {
+		service_mileage = i;
 	}
 
-	public void setGas_cost(String s) {
-		gas_cost = s;
+	public void setService_cost(String s) {
+		service_cost = s;
 	}
 
 	public String getLongdesc() {
@@ -71,20 +71,20 @@ public final class ServiceBean implements Serializable {
 		this.longdesc = longdesc;
 	}
 
-	public String getSvc_routine_cost() {
-		return svc_routine_cost;
+	public String getService_routine_cost() {
+		return service_routine_cost;
 	}
 
-	public void setSvc_routine_cost(String svc_routine_cost) {
-		this.svc_routine_cost = svc_routine_cost;
+	public void setService_routine_cost(String svc_routine_cost) {
+		this.service_routine_cost = svc_routine_cost;
 	}
 
-	public String getSvc_repair_cost() {
-		return svc_repair_cost;
+	public String getService_repair_cost() {
+		return service_repair_cost;
 	}
 
-	public void setSvc_repair_cost(String svc_repair_cost) {
-		this.svc_repair_cost = svc_repair_cost;
+	public void setService_repair_cost(String svc_repair_cost) {
+		this.service_repair_cost = svc_repair_cost;
 	}
 
 }

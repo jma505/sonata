@@ -107,13 +107,13 @@ public class Processor {
 		while (iter.hasNext()) {
 			log = (Log) iter.next();
 			serviceBean = new ServiceBean();
-			serviceBean.setGas_id(log.getId().intValue());
-			serviceBean.setGas_date(DateFormat.getDateInstance(2).format(log.getDate()));
-			serviceBean.setGas_mileage(log.getMileage().intValue());
+			serviceBean.setService_id(log.getId().intValue());
+			serviceBean.setService_date(DateFormat.getDateInstance(2).format(log.getDate()));
+			serviceBean.setService_mileage(log.getMileage().intValue());
 			serviceBean.setLongdesc(log.getLongdesc());
-			serviceBean.setGas_cost(cnf2.format(log.getCost().floatValue()));
-			serviceBean.setSvc_repair_cost(cnf2.format(log.getSvcRepairCost().floatValue()));
-			serviceBean.setSvc_routine_cost(cnf2.format(log.getSvcRoutineCost().floatValue()));
+			serviceBean.setService_cost(cnf2.format(log.getCost().floatValue()));
+			serviceBean.setService_repair_cost(cnf2.format(log.getSvcRepairCost().floatValue()));
+			serviceBean.setService_routine_cost(cnf2.format(log.getSvcRoutineCost().floatValue()));
 			serviceBeans.add(serviceBean);
 		}
 		
