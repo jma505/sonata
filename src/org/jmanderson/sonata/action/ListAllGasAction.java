@@ -25,7 +25,7 @@ import org.jmanderson.sonata.hibernate.Users;
  * @struts.action validate="true"
  * @struts.action-forward name="success" path="/gaslist.jsp"
  */
-public class ListAllAction extends Action {
+public class ListAllGasAction extends Action {
 	/*
 	 * Generated Methods
 	 */

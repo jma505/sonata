@@ -72,8 +72,11 @@
     <action path="/delete" type="org.jmanderson.sonata.action.DeleteAction">
       <forward name="success" path="/gasList.do" />
     </action>
-    <action path="/listAll" type="org.jmanderson.sonata.action.ListAllAction">
+    <action path="/listAllGas" type="org.jmanderson.sonata.action.ListAllGasAction">
       <forward name="success" path="/gasxml.jsp" />
+    </action>
+    <action path="/listAllService" type="org.jmanderson.sonata.action.ListAllServiceAction">
+      <forward name="success" path="/servicexml.jsp" />
     </action>
   </action-mappings>
   <message-resources parameter="org.jmanderson.sonata.ApplicationResources" />

@@ -13,7 +13,7 @@
 <br>
 <center>
 <h2><bean:message key="gaslist.heading"/> <jsp:getProperty name="user" property="userFullName"/></h2>
-<font size="-1">v1.1</font>
+<font size="-1">v1.2</font>
 <html:link href="logoff.do"><h4>Logoff</h4></html:link>
 </center>
 
@@ -60,8 +60,8 @@ Next service (<jsp:getProperty name="mpg" property="nextServiceMileage"/> mile) 
 <td align="center"><form method="post" action="editGas.do">
 <input type="submit" name="add" value="Add New Entry"/>
 </form></td>
-<td align="center"><form method="post" action="listAll.do">
-<input type="submit" name="list" value="Complete Service List"/>
+<td align="center"><form method="post" action="listAllGas.do">
+<input type="submit" name="list" value="Complete Gas List"/>
 </form></td></table>
 </center>
 
@@ -98,6 +98,9 @@ Next service (<jsp:getProperty name="mpg" property="nextServiceMileage"/> mile) 
 <td align="center"><form method="post" action="editService.do">
 <input type="submit" name="add" value="Add New Entry"/>
 </form></td>
+<td align="center"><form method="post" action="listAllService.do">
+<input type="submit" name="list" value="Complete Service List"/>
+</form></td></table>
 
 
 </body>

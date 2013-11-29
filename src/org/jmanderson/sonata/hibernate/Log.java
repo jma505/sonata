@@ -113,6 +113,10 @@ public class Log extends AbstractLog implements java.io.Serializable {
     	return false;
     }
     
+    private boolean isScheduledService() {
+    	return getFormalService().booleanValue();
+    }
+    
     public String getGasXML() {
     	StringBuffer sb = new StringBuffer();
     	if (isGasPurchase()) {
@@ -135,6 +139,11 @@ public class Log extends AbstractLog implements java.io.Serializable {
     		sb.append("<routine_cost>").append(nf2.format(getSvcRoutineCost())).append("</routine_cost>");
     		sb.append("<repair_cost>").append(nf2.format(getSvcRepairCost())).append("</repair_cost>");
     		sb.append("<long_desc>").append(getLongdesc()).append("</long_desc>");
+    		sb.append("<scheduled_service>");
+    		if (isScheduledService()) {
+    			sb.append("Yes");
+    		}
+    		sb.append("</scheduled_service>");
     		sb.append("</service>");
     	}
     	
