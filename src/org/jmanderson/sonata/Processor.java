@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.struts.action.ActionForm;
 import org.jmanderson.sonata.da.LogDA;
 import org.jmanderson.sonata.da.UsersDA;
 import org.jmanderson.sonata.form.GasForm;
@@ -70,6 +71,14 @@ public class Processor {
 		Log log = new Log();
 		log.loadFromServiceForm(form);
 		LogDA.addOrUpdate(log);
+	}
+	
+	public static void delete(GasForm form) {
+		LogDA.deleteLogById(form.getGas_id());
+	}
+	
+	public static void delete(ServiceForm form) {
+		LogDA.deleteLogById(form.getService_id());
 	}
 	
 	public static List getLastFiveGasEntries() {

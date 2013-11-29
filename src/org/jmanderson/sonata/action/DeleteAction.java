@@ -40,7 +40,7 @@ public class DeleteAction extends Action {
 		HttpServletResponse response) {
 
 		// TODO Auto-generated method stub
-		return null;
+		return mapping.findForward("success");
 	}
 
 }

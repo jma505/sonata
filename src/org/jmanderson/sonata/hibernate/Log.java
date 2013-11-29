@@ -62,6 +62,7 @@ public class Log extends AbstractLog implements java.io.Serializable {
     	// The following needs to be changed once we implement Service tracking
     	//
     	setService(Boolean.FALSE);
+    	setFormalService(Boolean.FALSE);
     	
     }
     
@@ -79,7 +80,7 @@ public class Log extends AbstractLog implements java.io.Serializable {
     	// Does this need to be changed???
     	//
     	setService(Boolean.TRUE);
-    	setFormalService(Boolean.valueOf(form.getFormalService()));
+    	setFormalService(form.getScheduledService());
     }
     
     public void fillGasForm(GasForm form) {
@@ -102,7 +103,7 @@ public class Log extends AbstractLog implements java.io.Serializable {
     	form.setService_routine_cost(this.getSvcRoutineCost().floatValue());
     	form.setService_repair_cost(this.getSvcRepairCost().floatValue());
     	form.setService_long_desc(this.getLongdesc());
-    	form.setFormalService(this.getFormalService().booleanValue());
+    	form.setScheduledService(this.getFormalService());
     }
     
     private boolean isGasPurchase() {

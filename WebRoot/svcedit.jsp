@@ -46,6 +46,9 @@
   <td align="left"><html:text property="service_mileage" size="6" maxlength="6"/></td>
 </tr>
 <tr>
+  <th align="right">Scheduled Service:</th>
+  <td align="left"><html:checkbox property="formalService"></html:checkbox>
+<tr>
   <th align="right">Total Cost:</th>
   <td align="left"><html:text property="service_cost" size="6" maxlength="6"/>&nbsp;&nbsp;(999.99)</td>
 </tr>

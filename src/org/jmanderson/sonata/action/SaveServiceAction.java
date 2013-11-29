@@ -61,10 +61,11 @@ public class SaveServiceAction extends Action {
 		
 		String delete = (String) request.getParameter("delete");
 		if (delete != null) {
-			return mapping.findForward("delete");
+			Processor.delete(serviceForm);
 		}
-		
-		Processor.save(serviceForm);
+		else {
+			Processor.save(serviceForm);
+		}
 		
 		return mapping.findForward("success");
 	}

@@ -19,7 +19,7 @@ Calculate Next Service Date
   try {
     int mileage = Integer.parseInt(request.getParameter("mileage"));
     String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-    nextService = CalcService.calculateNextServiceDate("2001-03-09", "2002-10-24", today, 30176, mileage);
+    nextService = CalcService.calculateNextServiceDate("2001-03-09", "2002-10-24", today, 30176, mileage, 0);
   } catch (Exception e) { }
    
   out.println("<center><h1>" + nextService + "</h1></center>");

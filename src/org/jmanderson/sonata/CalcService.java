@@ -8,15 +8,15 @@ public class CalcService {
 
 	private static final int SERVICE_INTERVAL = 5000;
 
-//	public static String calculateNextServiceDate(String begin, String last,
-//			String latest, int lastServiceMileage, int latestMileage) {
-//		Date beginDate = getDate(begin);
-//		Date lastServiceDate = getDate(last);
-//		Date latestDate = getDate(latest);
-//		return calculateNextServiceDate(beginDate, lastServiceDate, latestDate,
-//				lastServiceMileage, latestMileage);
-//
-//	}
+	public static String calculateNextServiceDate(String begin, String last,
+			String latest, int lastServiceMileage, int latestMileage, int numberOfServices) {
+		Date beginDate = getDate(begin);
+		Date lastServiceDate = getDate(last);
+		Date latestDate = getDate(latest);
+		return calculateNextServiceDate(beginDate, lastServiceDate, latestDate,
+				lastServiceMileage, latestMileage, numberOfServices);
+
+	}
 
 	public static String calculateNextServiceDate(Date beginDate,
 			Date lastServiceDate, Date latestDate, int lastServiceMileage,

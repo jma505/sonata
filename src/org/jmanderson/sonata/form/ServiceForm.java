@@ -38,7 +38,7 @@ public class ServiceForm extends ActionForm {
 	private float service_repair_cost;
 	private String service_long_desc;
 	private String service_dateD;
-	private boolean formal_service;
+	private String formal_service;
 	
 
 	// --------------------------------------------------------- Methods
@@ -151,12 +151,30 @@ public class ServiceForm extends ActionForm {
 		this.service_dateD = service_dateD;
 	}
 	
-	public boolean getFormalService() {
+	public String getFormalService() {
 		return formal_service;
 	}
 	
-	public void setFormalService(boolean formal_service) {
+	public void setFormalService(String formal_service) {
 		this.formal_service = formal_service;
+	}
+	
+	public Boolean getScheduledService() {
+		if (formal_service != null && formal_service.equalsIgnoreCase("on")) {
+			return Boolean.TRUE;
+		}
+		else {
+			return Boolean.FALSE;
+		}
+	}
+	
+	public void setScheduledService(Boolean svc) {
+		if (svc) {
+			setFormalService("on");
+		}
+		else {
+			setFormalService(null);
+		}
 	}
 
 }

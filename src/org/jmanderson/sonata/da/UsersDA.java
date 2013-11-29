@@ -20,6 +20,7 @@ public class UsersDA {
 		try {
 			Session session = SessionFactory.getSession();
 			user = (Users) session.load(Users.class, username);
+			session.evict(user);
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);

@@ -61,10 +61,11 @@ public class SaveGasAction extends Action {
 		
 		String delete = (String) request.getParameter("delete");
 		if (delete != null) {
-			return mapping.findForward("delete");
+			Processor.delete(gasForm);
 		}
-		
-		Processor.save(gasForm);
+		else {
+			Processor.save(gasForm);
+		}
 		
 		return mapping.findForward("success");
 	}

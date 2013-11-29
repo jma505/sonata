@@ -34,16 +34,35 @@ public class LogDA {
 		try {
 			Session session = SessionFactory.getSession();
 			log = (Log) session.load(Log.class, Integer.valueOf(id));
+			session.evict(log);
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return log;
 	}
 
+	public static void deleteLogById(int id) {
+		Log log = new Log();
+		log.setId(Integer.valueOf(id));
+		try {
+			Session session = SessionFactory.getSession();
+			session.beginTransaction();
+			session.delete(log);
+			session.getTransaction().commit();
+		}
+		catch (Exception e) {
+			// TODO logging
+			System.out.println(e);
+		} finally {
+			SessionFactory.getSession().flush();
+		}
+	}
+	
 	public static Log getLastEntry() {
 
 		Log log = null;
@@ -59,6 +78,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return log;
@@ -79,6 +99,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return log;
@@ -99,6 +120,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return list;
@@ -120,6 +142,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return mileage;
@@ -140,6 +163,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return list;
@@ -159,6 +183,7 @@ public class LogDA {
 			txn.rollback();
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 	}
 
@@ -175,6 +200,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return list;
@@ -199,6 +225,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return gallons;
@@ -264,6 +291,7 @@ public class LogDA {
 			System.out.println(e);
 		} finally {
 			// SessionFactory.closeSession();
+			SessionFactory.getSession().flush();
 		}
 
 		return mpg;
