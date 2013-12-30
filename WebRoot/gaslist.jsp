@@ -13,7 +13,7 @@
 <br>
 <center>
 <h2><bean:message key="gaslist.heading"/> <jsp:getProperty name="user" property="userFullName"/></h2>
-<font size="-1">v1.2</font>
+<font size="-1">v1.3</font>
 <html:link href="logoff.do"><h4>Logoff</h4></html:link>
 </center>
 

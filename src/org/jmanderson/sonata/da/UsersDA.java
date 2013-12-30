@@ -6,11 +6,14 @@ package org.jmanderson.sonata.da;
 
 
 import org.hibernate.Session;
-import org.jmanderson.sonata.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.SessionFactory;
 import org.jmanderson.sonata.hibernate.Users;
 
 public class UsersDA {
 
+	private static final SessionFactory factory = new Configuration().configure().buildSessionFactory();
+	
 	private UsersDA() {
 	}
 
@@ -18,14 +21,16 @@ public class UsersDA {
 
 		Users user = null;
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			user = (Users) session.load(Users.class, username);
-			session.evict(user);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
-//			SessionFactory.closeSession();
+			factory.getCurrentSession().close();
 		}
 
 		return user;

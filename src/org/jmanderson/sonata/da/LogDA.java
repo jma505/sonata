@@ -4,6 +4,8 @@ package org.jmanderson.sonata.da;
  * New DAO for the log table.
  */
 
+// 
+//
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +15,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
@@ -21,10 +24,13 @@ import org.hibernate.type.StandardBasicTypes;
 import org.jmanderson.sonata.CalcService;
 import org.jmanderson.sonata.MPGBean;
 import org.jmanderson.sonata.hibernate.Log;
-import org.jmanderson.sonata.hibernate.SessionFactory;
+import org.hibernate.SessionFactory;
+
 
 public class LogDA {
 
+	private static final SessionFactory factory = new Configuration().configure().buildSessionFactory();
+	
 	private LogDA() {
 	}
 
@@ -32,15 +38,17 @@ public class LogDA {
 
 		Log log = null;
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			log = (Log) session.load(Log.class, Integer.valueOf(id));
-			session.evict(log);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return log;
@@ -50,7 +58,7 @@ public class LogDA {
 		Log log = new Log();
 		log.setId(Integer.valueOf(id));
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
 			session.beginTransaction();
 			session.delete(log);
 			session.getTransaction().commit();
@@ -58,8 +66,9 @@ public class LogDA {
 		catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 	}
 	
@@ -67,18 +76,21 @@ public class LogDA {
 
 		Log log = null;
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Log.class);
 			DetachedCriteria maxId = DetachedCriteria.forClass(Log.class)
 					.setProjection(Property.forName("id").max());
 			criteria.add(Property.forName("id").eq(maxId));
 			log = (Log) criteria.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return log;
@@ -88,18 +100,21 @@ public class LogDA {
 
 		Log log = null;
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Log.class);
 			DetachedCriteria minId = DetachedCriteria.forClass(Log.class)
 					.setProjection(Property.forName("id").min());
 			criteria.add(Property.forName("id").eq(minId));
 			log = (Log) criteria.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return log;
@@ -109,18 +124,21 @@ public class LogDA {
 
 		List list = new ArrayList();
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Log.class);
 			criteria.add(Restrictions.eq("service", Boolean.valueOf(false)));
 			criteria.addOrder(Order.desc("mileage"));
 			criteria.setMaxResults(5);
 			list = criteria.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return list;
@@ -131,18 +149,21 @@ public class LogDA {
 		int mileage = -1;
 
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			Query query = session
 					.createSQLQuery(
 							"select max(mileage) as mileage from log where gallons > 0.000")
 					.addScalar("mileage", StandardBasicTypes.INTEGER);
 			mileage = ((Integer) query.uniqueResult()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return mileage;
@@ -152,18 +173,21 @@ public class LogDA {
 
 		List list = new ArrayList();
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Log.class);
 			criteria.add(Restrictions.eq("service", Boolean.valueOf(true)));
 			criteria.addOrder(Order.desc("mileage"));
 			criteria.setMaxResults(5);
 			list = criteria.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return list;
@@ -171,19 +195,18 @@ public class LogDA {
 
 	public static void addOrUpdate(Log log) {
 
-		Transaction txn = null;
 		try {
-			Session session = SessionFactory.getSession();
-			txn = session.beginTransaction();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			session.saveOrUpdate(log);
-			txn.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
-			txn.rollback();
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 	}
 
@@ -191,16 +214,19 @@ public class LogDA {
 
 		List list = new ArrayList();
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Log.class);
 			criteria.addOrder(Order.asc("date")).addOrder(Order.asc("mileage"));
 			list = criteria.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return list;
@@ -210,7 +236,8 @@ public class LogDA {
 		float gallons = 0;
 
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			StringBuffer sb = new StringBuffer();
 			sb.append(
 					"select sum(x.gallons) as gsum from (select gallons from log where id > ")
@@ -220,12 +247,14 @@ public class LogDA {
 					"gsum", StandardBasicTypes.FLOAT);
 			// Object[] result = (Object[]) query.uniqueResult();
 			gallons = ((Float) query.uniqueResult()).floatValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return gallons;
@@ -235,7 +264,8 @@ public class LogDA {
 		MPGBean mpg = new MPGBean();
 
 		try {
-			Session session = SessionFactory.getSession();
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
 			Query query = session
 					.createSQLQuery(
 							"select ((max(mileage)-min(mileage))/sum(gallons)) as mpg, (sum(cost)/sum(gallons)) as price from log")
@@ -286,12 +316,14 @@ public class LogDA {
 			mpg.setNextServiceDate(CalcService.calculateNextServiceDate(
 					beginDate, lastServiceDate, latestDate, lastServiceMileage,
 					latestMileage, numberOfServices));
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO logging
 			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
 		} finally {
 			// SessionFactory.closeSession();
-			SessionFactory.getSession().flush();
+			factory.getCurrentSession().close();
 		}
 
 		return mpg;
