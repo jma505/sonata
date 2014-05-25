@@ -328,4 +328,46 @@ public class LogDA {
 
 		return mpg;
 	}
+	
+	public static String getTripInformation(String start, String end) {
+		
+		StringBuffer sb = new StringBuffer();
+		
+		NumberFormat nf1 = NumberFormat.getInstance();
+		NumberFormat cnf2 = NumberFormat.getCurrencyInstance();
+		NumberFormat cnf3 = NumberFormat.getCurrencyInstance();
+		nf1.setMinimumFractionDigits(1);
+		nf1.setMaximumFractionDigits(1);
+		cnf2.setMinimumFractionDigits(2);
+		cnf2.setMaximumFractionDigits(2);
+		cnf3.setMinimumFractionDigits(3);
+		cnf3.setMaximumFractionDigits(3);
+		
+		try {
+			Session session = factory.getCurrentSession();
+			session.beginTransaction();
+			sb.append("select spgettripmpg(").append(start).append(",").append(end).append(")");
+			Query query = session.createSQLQuery(sb.toString());
+			String result = (String) query.uniqueResult();
+			String[] results = result.split("[:]");
+			String tripmpg = nf1.format(Float.valueOf(results[0]).floatValue());
+			String tripcostpermile = cnf3.format(Float.valueOf(results[1]).floatValue());
+			String tripcostpergallon = cnf2.format(Float.valueOf(results[2]).floatValue());
+			sb = new StringBuffer();
+			sb.append("Trip MPG = ").append(tripmpg).append("<br/>");
+			sb.append("Trip Cost per Mile = ").append(tripcostpermile).append("<br/>");
+			sb.append("Trip Average Cost per Gallon = ").append(tripcostpergallon).append("<br/>");
+		} catch (Exception e) {
+			// TODO logging
+			System.out.println(e);
+			factory.getCurrentSession().getTransaction().rollback();
+			sb = new StringBuffer();
+			sb.append(e);
+		} finally {
+			// SessionFactory.closeSession();
+			factory.getCurrentSession().close();
+		}
+		
+		return sb.toString();
+	}
 }
